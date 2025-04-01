@@ -1,0 +1,187 @@
+---
+title: "Global House Market Analysis"
+author: "Julius"
+date: "2025-03-30"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+library(grid)
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(scales)
+library(naniar)
+library(ggplot2)
+library(RColorBrewer)
+library(rvest)
+library(leaflet)
+```
+
+
+```{r}
+house_market <- read_csv("/Users/julius/Personal/Personal_Project/House_market_analysis/Global-Housing-Market-Analysis/Dataset/global_housing_market_extended.csv")
+Countries_coordinate <- read_csv("/Users/julius/Personal/Personal_Project/House_market_analysis/Global-Housing-Market-Analysis/Dataset/world_country_and_usa_states_latitude_and_longitude_values.csv")
+```
+
+```{r}
+Countries_coordinate <- select(Countries_coordinate,1:4)
+```
+
+```{r}
+#Run this once only
+#Filtering the list of countries that are inside the house market dataset and. joining the two dataset
+country_filter <- c("United States","Canada","United Kingdom","Germany","France","Italy","Spain","Australia","India","China","Japan","Sweden","Brazil","South Korea","Mexico","South Africa","Russia","Netherlands","Switzerland","United Arab Emirates")
+
+Countries_coordinate <- Countries_coordinate %>%
+  filter(country %in% country_filter) %>%
+  mutate(country = ifelse(country == "United Arab Emirates", "UAE", country)) %>%
+  mutate(country = ifelse(country == "United States", "USA", country))%>%
+  mutate(country = ifelse(country == "United Kingdom", "UK", country))
+
+colnames(Countries_coordinate)[4] <- "Country"
+
+#joining the two files
+House_market_coordinate <- (left_join(house_market, Countries_coordinate, by='Country'))
+```
+
+```{r}
+#initial analysis
+summary(House_market_coordinate)
+
+#Distribution of key metrics
+ggplot(House_market_coordinate, aes(x = `House Price Index`)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  labs(title = "Distribution of House Price Index")
+
+```
+
+```{r}
+#Time Trends
+ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, fill = Country)) +
+  geom_line(aes(color = Country)) + 
+  geom_point(aes(color = Country), shape = 21, size = 2,color = "white") +  
+  labs(title = "House Price Index Over Time") +
+  theme_minimal()
+
+```
+
+```{r}
+# Create the correlation matrix
+correlation_matrix <- cor(House_market_coordinate[, c("House Price Index", "Rent Index", "Affordability Ratio", 
+                                                     "Mortgage Rate (%)", "Inflation Rate (%)", "GDP Growth (%)", 
+                                                     "Population Growth (%)", "Urbanization Rate (%)", 
+                                                     "Construction Index")])
+
+# Enhanced correlation plot
+corrplot(correlation_matrix, 
+         method = "circle",       
+         type = "upper",               
+         col = colorRampPalette(c("blue", "white", "red"))(200),  
+         tl.col = "black",           
+         tl.srt = 90,                  
+         addCoef.col = "black",      
+         number.cex = 0.7,           
+         diag = FALSE,                 
+         cl.lim = c(-1, 1),           
+         cl.pos = "r",                  
+         title = "Correlation Heatmap of House Market Variables",  
+         mar = c(0, 0, 1, 0)  
+)
+
+```
+
+```{r}
+summary(House_market_coordinate[, c("House Price Index", "Rent Index", "Affordability Ratio", "Mortgage Rate (%)")])
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `GDP Growth (%)`, y = `House Price Index`)) +
+  geom_point(aes(color = Country)) +
+  geom_smooth(method = "lm") +
+  labs(title = "Correlation Between GDP Growth and House Price Index")
+```
+
+```{r}
+#comparing other countries
+ggplot(House_market_coordinate, aes(x = reorder(Country, `House Price Index`), y = `House Price Index`, fill = Country)) +  
+  geom_bar(stat = "identity", position = "dodge") +  
+  coord_flip() +  
+  facet_wrap(~ Year) +  # Creates separate plots for each year
+  labs(title = "House Price Index by Country Over the Years", 
+       x = "Country", 
+       y = "House Price Index") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, color = Country)) +  
+  geom_line() +  
+  geom_point() +  # Adds dots at each year
+  labs(title = "House Price Index Trends by Country", 
+       x = "Year", 
+       y = "House Price Index") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +  
+  geom_point(size = 3) +  
+  facet_wrap(~ Country) +  
+  labs(title = "HPI vs Population Growth by Country",
+       x = "Population Growth (%)",
+       y = "House Price Index") +  
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +  
+  geom_point(size = 3, alpha = 0.7) +  
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +  
+  labs(title = "House Price Index vs Population Growth (%) by Year",  
+       x = "Population Growth (%)",  
+       y = "House Price Index") +  
+  facet_wrap(~Year) +  # This creates a separate plot for each year  
+  theme_minimal()
+```
+
+```{r}
+ggplot(House_market_coordinate %>% filter(Year %in% c(2015, 2024)),  
+       aes(x = reorder(Country, `House Price Index`),  
+           y = `House Price Index`,  
+           fill = factor(Year))) +  
+  geom_bar(stat = "identity", position = "dodge") +  
+  coord_flip() +  
+  labs(title = "House Price Index Comparison: 2015 vs 2024",  
+       x = "Country",  
+       y = "House Price Index",  
+       fill = "Year") +  
+  theme_minimal()
+```
+## Halo
