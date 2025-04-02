@@ -22,9 +22,13 @@ Source: Kaggle.com
 Dataset Name: Global Housing Market Analysis (2015-2024)
 Content: 201 Rows, 11 Collumns
     1. Country: The name of the countries that are listed inside the dataset
+    
     2. Year : The year of the informations
+    
     3. House Price Index: 
+    
     4. Rent Index
+    
     5. Affordability Ratio 
     6. Mortgage Rate (%)
     7. Inflation Rate (%)
