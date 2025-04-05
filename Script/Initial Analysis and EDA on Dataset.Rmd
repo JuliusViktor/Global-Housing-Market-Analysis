@@ -1,6 +1,6 @@
 ---
 title: "Global House Market Analysis"
-author: "Julius"
+author: "Julius Viktor Liegata"
 date: "2025-03-30"
 output:
   pdf_document: default
@@ -8,16 +8,12 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,message = FALSE,warning = FALSE)
 ```
 
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 ```{r}
 library(grid)
 library(tidyverse)
@@ -37,11 +33,22 @@ library(leaflet)
 #tinytex::install_tinytex()
 ```
 
+## Reminder:
+
+Make sure to check your file source since this is run inside my personal computer the file path might change on your end. '
+
+from github you can use this directory:
+
+Global-Housing-Market-Analysis/Dataset/global_housing_market_extended.csv
+House_market_analysis/Global-Housing-Market-Analysis/Dataset/world_country_and_usa_states_latitude_and_longitude_values.csv
+
 ```{r}
 house_market <- read_csv("/Users/julius/Personal/Personal_Project/House_market_analysis/Global-Housing-Market-Analysis/Dataset/global_housing_market_extended.csv")
 Countries_coordinate <- read_csv("/Users/julius/Personal/Personal_Project/House_market_analysis/Global-Housing-Market-Analysis/Dataset/world_country_and_usa_states_latitude_and_longitude_values.csv")
 ```
+## Reminder:
 
+Filtering the list again would remove the other files in the dataset so make sure to run this chunk of codes only one time so no data will be missing for the analysis below.
 ```{r}
 Countries_coordinate <- select(Countries_coordinate,1:4)
 ```
@@ -64,89 +71,7 @@ House_market_coordinate <- (left_join(house_market, Countries_coordinate, by='Co
 ```
 
 ```{r}
-#initial analysis
 summary(House_market_coordinate)
-
-#Distribution of key metrics
-ggplot(House_market_coordinate, aes(x = `House Price Index`)) + 
-  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
-  labs(title = "Distribution of House Price Index")
-
-```
-
-```{r}
-#Time Trends
-ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, color = Country)) +  
-  geom_line(size = 1) +  
-  geom_point(size = 2) +  
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 0.8) +  # Add trend line
-  facet_wrap(~ Country, scales = "free_y") +  
-  labs(title = "House Price Index Trends (2015–2024) by Country with Trend Lines",
-       x = "Year",
-       y = "House Price Index") +
-  theme_minimal(base_size = 12) +
-  theme(legend.position = "none",
-        strip.text = element_text(face = "bold", size = 10),
-        axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-# Create the correlation matrix
-correlation_matrix <- cor(House_market_coordinate[, c("House Price Index", "Rent Index", "Affordability Ratio", 
-                                                     "Mortgage Rate (%)", "Inflation Rate (%)", "GDP Growth (%)", 
-                                                     "Population Growth (%)", "Urbanization Rate (%)", 
-                                                     "Construction Index")])
-
-# Enhanced correlation plot
-corrplot(correlation_matrix, 
-         method = "circle",       
-         type = "upper",               
-         col = colorRampPalette(c("blue", "white", "red"))(200),  
-         tl.col = "black",           
-         tl.srt = 90,                  
-         addCoef.col = "black",      
-         number.cex = 0.7,           
-         diag = FALSE,                 
-         cl.lim = c(-1, 1),           
-         cl.pos = "r",                  
-         title = "Correlation Heatmap of House Market Variables",  
-         mar = c(0, 0, 1, 0)  
-)
-
-```
-
-```{r}
-summary(House_market_coordinate[, c("House Price Index", "Rent Index", "Affordability Ratio", "Mortgage Rate (%)")])
-```
-
-```{r}
-ggplot(House_market_coordinate, aes(x = `GDP Growth (%)`, y = `House Price Index`)) +
-  geom_point(aes(color = Country)) +
-  geom_smooth(method = "lm") +
-  labs(title = "Correlation Between GDP Growth and House Price Index")
-```
-
-```{r}
-#comparing other countries
-ggplot(House_market_coordinate, aes(x = reorder(Country, `House Price Index`), y = `House Price Index`, fill = Country)) +  
-  geom_bar(stat = "identity", position = "dodge") +  
-  coord_flip() +  
-  facet_wrap(~ Year) +  # Creates separate plots for each year
-  labs(title = "House Price Index by Country Over the Years", 
-       x = "Country", 
-       y = "House Price Index") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +  
-  geom_point(size = 3, alpha = 0.7) +  
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +  
-  labs(title = "House Price Index vs Population Growth (%) by Year",  
-       x = "Population Growth (%)",  
-       y = "House Price Index") +  
-  facet_wrap(~Year) +  # This creates a separate plot for each year  
-  theme_minimal()
 ```
 
 ```{r}
@@ -162,7 +87,53 @@ ggplot(House_market_coordinate %>% filter(Year %in% c(2015, 2024)),
        fill = "Year") +  
   theme_minimal()
 ```
+## House Price Index Comparison Between Year 2015 And Year 2024
 
+This horizontal bar chart compares the House Price Index (HPI) between 2015 and 2024 for various countries. Notably, countries like China, Italy, the Netherlands, the UK, and France exhibit significantly higher HPI values in both years compared to the benchmark of 100. In 2024, these countries generally show HPI values exceeding 150, representing a 50% or more increase above the assumed 'normal' level of 100.  Additionally, a visual comparison of the red (2015) and teal (2024) bars for each country reveals the change in HPI over this 9-year period, highlighting countries with growth, decline, or relatively stable housing markets. One of many reason why some of this countries have a high number of HPI are because they have a strong economic growth and a high number of urbanization and high number of population density.
+
+
+```{r}
+#Time Trends
+ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, color = Country)) +  
+  geom_line(size = 1) +  
+  geom_point(size = 2) +  
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 0.8) +  # Add trend line
+  facet_wrap(~ Country, scales = "free_y") +  
+  labs(title = "House Price Index Trends (2015–2024) by Country",
+       x = "Year",
+       y = "House Price Index") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none",
+        strip.text = element_text(face = "bold", size = 10),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+## House Price Index between 2015 - 2024 by Country
+
+This chart above shows how House Price Index changed in various countries between 2015 to 2024, and it shows that a HPI trends vary significantly across countries, showing different levels of volatility and growth patterns. Additionaly, some countries have consistently rising HPI such as UK while others show fluctuations or decline this trends are also affected by each countries unique economic and market factors.
+
+## More analysis are below.
+
+```{r}
+summary(House_market_coordinate[, c("House Price Index", "Rent Index", "Affordability Ratio", "Mortgage Rate (%)")])
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `GDP Growth (%)`, y = `House Price Index`)) +
+  geom_point(aes(color = Country)) +
+  geom_smooth(method = "lm") +
+  labs(title = "Correlation Between GDP Growth and House Price Index")
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +  
+  geom_point(size = 3, alpha = 0.7) +  
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +  
+  labs(title = "House Price Index vs Population Growth (%) by Year",  
+       x = "Population Growth (%)",  
+       y = "House Price Index") +  
+  facet_wrap(~Year) +  # This creates a separate plot for each year  
+  theme_minimal()
+```
 
 ```{r}
 ggplot(House_market_coordinate, aes(x = Year, y = Country, fill = `House Price Index`)) +
@@ -189,26 +160,6 @@ ggplot(House_market_coordinate, aes(x = `Urbanization Rate (%)`, y = `House Pric
   theme_minimal()
 ```
 
-
-```{r}
-ggplot(House_market_coordinate, aes(x = `Rent Index`, y = `House Price Index`, color = Country)) +
-  geom_point(size = 3, alpha = 0.7) +
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
-  labs(title = "House Price Index vs Rent Index",
-       x = "Rent Index", y = "House Price Index") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(House_market_coordinate, aes(x = `Mortgage Rate (%)`, y = `House Price Index`, color = Country)) +
-  geom_point(size = 3, alpha = 0.7) +
-  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
-  labs(title = "House Price Index vs Mortgage Rate",
-       x = "Mortgage Rate (%)", y = "House Price Index") +
-  theme_minimal()
-```
-
-
 ```{r}
 #Rent index over the year
 ggplot(House_market_coordinate, aes(x = Year, y = `Rent Index`, color = Country)) +  
@@ -223,7 +174,47 @@ ggplot(House_market_coordinate, aes(x = Year, y = `Rent Index`, color = Country)
         strip.text = element_text(face = "bold"),
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
 ```{r}
 #Mortgage Rate by the year
+ggplot(House_market_coordinate, aes(x = Year, y = `Mortgage Rate (%)`, color = Country)) +  
+  geom_line(size = 1) +  
+  geom_point(size = 2) +  
+  facet_wrap(~ Country, scales = "free_y") +  
+  labs(title = "Mortgage Rate Trends (2015–2024) by Country",
+       x = "Year",
+       y = "Mortgage Rate (%)") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none",
+        strip.text = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+#combining rate and mortgage rate
+rent_mortgage <- House_market_coordinate %>%
+  pivot_longer(cols = c(`Rent Index`, `Mortgage Rate (%)`),
+               names_to = "Variable",
+               values_to = "Value")
+
+house_long_normalized <- rent_mortgage %>%
+  group_by(Country, Variable) %>%
+  mutate(Normalized = (Value - min(Value)) / (max(Value) - min(Value))) %>%
+  ungroup()
+
+```
+
+```{r}
+ggplot(house_long_normalized, aes(x = Year, y = Normalized, color = Variable)) +  
+  geom_line(size = 1) +  
+  geom_point(size = 2) +  
+  facet_wrap(~ Country) +  
+  labs(title = "Normalized Trends: Rent Index vs Mortgage Rate by Country",
+       x = "Year",
+       y = "Normalized Value") +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        strip.text = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
