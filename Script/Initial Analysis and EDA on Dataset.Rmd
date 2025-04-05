@@ -17,18 +17,6 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 ```{r}
 library(grid)
@@ -38,11 +26,16 @@ library(rnaturalearth)
 library(scales)
 library(naniar)
 library(ggplot2)
+library(tinytex)
 library(RColorBrewer)
 library(rvest)
+library(corrplot)
 library(leaflet)
 ```
 
+```{r}
+#tinytex::install_tinytex()
+```
 
 ```{r}
 house_market <- read_csv("/Users/julius/Personal/Personal_Project/House_market_analysis/Global-Housing-Market-Analysis/Dataset/global_housing_market_extended.csv")
@@ -83,12 +76,18 @@ ggplot(House_market_coordinate, aes(x = `House Price Index`)) +
 
 ```{r}
 #Time Trends
-ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, fill = Country)) +
-  geom_line(aes(color = Country)) + 
-  geom_point(aes(color = Country), shape = 21, size = 2,color = "white") +  
-  labs(title = "House Price Index Over Time") +
-  theme_minimal()
-
+ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, color = Country)) +  
+  geom_line(size = 1) +  
+  geom_point(size = 2) +  
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", size = 0.8) +  # Add trend line
+  facet_wrap(~ Country, scales = "free_y") +  
+  labs(title = "House Price Index Trends (2015–2024) by Country with Trend Lines",
+       x = "Year",
+       y = "House Price Index") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none",
+        strip.text = element_text(face = "bold", size = 10),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
@@ -140,27 +139,6 @@ ggplot(House_market_coordinate, aes(x = reorder(Country, `House Price Index`), y
 ```
 
 ```{r}
-ggplot(House_market_coordinate, aes(x = Year, y = `House Price Index`, color = Country)) +  
-  geom_line() +  
-  geom_point() +  # Adds dots at each year
-  labs(title = "House Price Index Trends by Country", 
-       x = "Year", 
-       y = "House Price Index") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +  
-  geom_point(size = 3) +  
-  facet_wrap(~ Country) +  
-  labs(title = "HPI vs Population Growth by Country",
-       x = "Population Growth (%)",
-       y = "House Price Index") +  
-  theme_minimal()
-
-```
-
-```{r}
 ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +  
   geom_point(size = 3, alpha = 0.7) +  
   geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +  
@@ -184,4 +162,68 @@ ggplot(House_market_coordinate %>% filter(Year %in% c(2015, 2024)),
        fill = "Year") +  
   theme_minimal()
 ```
-## Halo
+
+
+```{r}
+ggplot(House_market_coordinate, aes(x = Year, y = Country, fill = `House Price Index`)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "green", high = "red") +
+  labs(title = "House Price Index Heatmap by Country and Year",
+       x = "Year", y = "Country", fill = "HPI") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `Population Growth (%)`, y = `House Price Index`, color = Country)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+  labs(title = "House Price Index vs Population Growth",
+       x = "Population Growth (%)", y = "House Price Index") +
+  theme_minimal()
+
+ggplot(House_market_coordinate, aes(x = `Urbanization Rate (%)`, y = `House Price Index`, color = Country)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+  labs(title = "House Price Index vs Urbanization Rate",
+       x = "Urbanization Rate (%)", y = "House Price Index") +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `Rent Index`, y = `House Price Index`, color = Country)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+  labs(title = "House Price Index vs Rent Index",
+       x = "Rent Index", y = "House Price Index") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(House_market_coordinate, aes(x = `Mortgage Rate (%)`, y = `House Price Index`, color = Country)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+  labs(title = "House Price Index vs Mortgage Rate",
+       x = "Mortgage Rate (%)", y = "House Price Index") +
+  theme_minimal()
+```
+
+
+```{r}
+#Rent index over the year
+ggplot(House_market_coordinate, aes(x = Year, y = `Rent Index`, color = Country)) +  
+  geom_line(size = 1) +  
+  geom_point(size = 2) +  
+  facet_wrap(~ Country, scales = "free_y") +  
+  labs(title = "Rent Index Trends (2015–2024) by Country",
+       x = "Year",
+       y = "Rent Index") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none",
+        strip.text = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+#Mortgage Rate by the year
+```
+
