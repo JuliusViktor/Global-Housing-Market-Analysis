@@ -2,13 +2,13 @@
 
 Global Housing Market Analysis (2015-2024)
 
-📊 Exploring housing trends and predicting future prices using R
+## 📊 Exploring housing trends and predicting future prices using R
 
-🔍 Overview
+## 🔍 Overview
 
 This project analyzes global housing market trends from 2015-2024, exploring patterns in home prices, economic factors affecting prices, and forecasting future values.
 
-💡 Key Questions
+## 💡 Key Questions
 
 How have housing prices changed over the last decade globally?
 
@@ -16,7 +16,7 @@ What economic factors (GDP, inflation, interest rates) influence housing prices?
 
 Can we predict future housing prices using time series forecasting?
 
-📄 Datasets
+## 📄 Datasets
 
 Source: Kaggle.com
 Dataset Name: Global Housing Market Analysis (2015-2024)
@@ -44,5 +44,10 @@ Content: 201 Rows, 11 Collumns,
 
     11. Construction Index: A measure of the level and activity of the construction sector
 
+# 📊 Analysis
+
+The `Initial Analaysis RMD` can be found [https://github.com/JuliusViktor/Global-Housing-Market-Analysis/blob/main/Script/Initial%20Analysis%20and%20EDA%20on%20Dataset.Rmd]
+
+⚙️ Help:
 
 
