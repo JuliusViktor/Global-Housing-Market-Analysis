@@ -46,7 +46,8 @@ Content: 201 Rows, 11 Collumns,
 
 # 📊 Analysis
 
-The `Initial Analaysis RMD` can be found [here] ( https://github.com/JuliusViktor/Global-Housing-Market-Analysis/blob/main/Script/Initial%20Analysis%20and%20EDA%20on%20Dataset.Rmd )
+The `Initial Analaysis RMD` can be found [here](https://github.com/JuliusViktor/Global-Housing-Market-Analysis/blob/main/Script/Initial%20Analysis%20and%20EDA%20on%20Dataset.Rmd)
+
 
 ⚙️ Help:
 
