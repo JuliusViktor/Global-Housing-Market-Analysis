@@ -10,17 +10,17 @@ This project analyzes global housing market trends from 2015-2024, exploring pat
 
 ## 💡 Key Questions
 
-How have housing prices changed over the last decade globally?
+    1. How have housing prices changed over the last decade globally?
 
-What economic factors (GDP, inflation, interest rates) influence housing prices?
+    2. What economic factors (GDP, inflation, interest rates) influence housing prices?
 
-Can we predict future housing prices using time series forecasting?
+    3. Can we predict future housing prices using time series forecasting?
 
 ## 📄 Datasets
 
 Source: Kaggle.com
 Dataset Name: Global Housing Market Analysis (2015-2024)
-Content: 201 Rows, 11 Collumns,
+Content: 201 Rows, 11 Collumns
 
     1. Country: The name of the countries that are listed inside the dataset
     
