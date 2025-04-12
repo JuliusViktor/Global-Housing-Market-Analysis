@@ -14,7 +14,7 @@ This project analyzes global housing market trends from 2015-2024, exploring pat
 
     2. What economic factors (GDP, inflation, interest rates) influence housing prices?
 
-    3. Can we predict future housing prices using time series forecasting?
+    3. How resilient are housing markets during economic shocks like COVID-19
 
 ## 📄 Datasets
 
