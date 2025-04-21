@@ -50,6 +50,11 @@ The `Initial Analaysis RMD` can be found [here](https://github.com/JuliusViktor/
 
 The `report` for the initial analysis can be found [here](https://github.com/JuliusViktor/Global-Housing-Market-Analysis/blob/main/Report/Initial%20Analysis.pdf)
 
+# 📊 Dashboard
+
+You can view my dashboard by clicking through [here](eyJrIjoiOGMzMmVkMmEtNzQ2MC00N2ZlLThkMzgtYWM0OGNlY2NhMzg5IiwidCI6IjM0ODViOTYzLTgyYmEtNGE2Zi04MTBmLWI1Y2MyMjZmZjg5OCIsImMiOjEwfQ)
+
+
 ⚙️ Help:
 
 If you want to run your code alone make sure to change the file directory like in the command line inside RMD and only run the filtering process once in order to retain the information.
