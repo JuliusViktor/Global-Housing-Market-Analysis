@@ -52,7 +52,8 @@ The `report` for the initial analysis can be found [here](https://github.com/Jul
 
 # 📊 Dashboard
 
-You can view my dashboard by clicking through [here](eyJrIjoiOGMzMmVkMmEtNzQ2MC00N2ZlLThkMzgtYWM0OGNlY2NhMzg5IiwidCI6IjM0ODViOTYzLTgyYmEtNGE2Zi04MTBmLWI1Y2MyMjZmZjg5OCIsImMiOjEwfQ)
+You can view my dashboard by clicking through 
+https://app.powerbi.com/view?r=eyJrIjoiOGMzMmVkMmEtNzQ2MC00N2ZlLThkMzgtYWM0OGNlY2NhMzg5IiwidCI6IjM0ODViOTYzLTgyYmEtNGE2Zi04MTBmLWI1Y2MyMjZmZjg5OCIsImMiOjEwfQ%3D%3D
 
 
 ⚙️ Help:
