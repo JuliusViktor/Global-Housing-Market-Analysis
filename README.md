@@ -50,11 +50,17 @@ The `Initial Analaysis RMD` can be found [here](https://github.com/JuliusViktor/
 
 The `report` for the initial analysis can be found [here](https://github.com/JuliusViktor/Global-Housing-Market-Analysis/blob/main/Report/Initial%20Analysis.pdf)
 
-# 📊 Dashboard
+# 📊 Dashboard and Insights
 
 You can view my dashboard by clicking through 
 https://app.powerbi.com/view?r=eyJrIjoiOGMzMmVkMmEtNzQ2MC00N2ZlLThkMzgtYWM0OGNlY2NhMzg5IiwidCI6IjM0ODViOTYzLTgyYmEtNGE2Zi04MTBmLWI1Y2MyMjZmZjg5OCIsImMiOjEwfQ%3D%3D
 
+    1. Top growth markets include China, Netherlands, Spain, and India with China HPI rising from 166 to 178. While UK, USA, France, and Switzerland had the lowest HPI in 2024, with the UK just 114. The line graph shows strong volatility tied to global events like COVID-19
+
+    2. Among the economic factors studied, mortgage and GDP growth have a stronger relationship with housing price than inflation. Countries with lower interest rates and stable economic growth show higher housing price indices.
+
+    3. The resilience of housing markets during event like COVID-19 varied widely across countries, with strong recoveries in Asia and Europe but continued struggles in parts of Africa and Oceania
+        
 
 ⚙️ Help:
 
